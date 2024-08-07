@@ -1,0 +1,43 @@
+{
+  "name": "budgetbuddy_fullstack",
+  "version": "1.0.0",
+  "description": "This is backend of BudgetBuddy application",
+  "main": "app.ts",
+  "scripts": {
+    "test": "Do start with npm start just",
+    "build": "tsc",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaazDanish/BudgetBuddy_FullStack.git"
+  },
+  "keywords": [
+    "budgetbuddy",
+    "backend",
+    "nodets",
+    "typescript"
+  ],
+  "author": "MaazDanish",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaazDanish/BudgetBuddy_FullStack/issues"
+  },
+  "homepage": "https://github.com/MaazDanish/BudgetBuddy_FullStack#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0",
+    "sequelize": "^6.37.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.1.0",
+    "@types/sequelize": "^4.28.20",
+    "nodemon": "^3.1.4"
+  }
+}
