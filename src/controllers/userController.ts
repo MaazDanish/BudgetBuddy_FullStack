@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import { eResultCodes } from "../enums/commonEnums";
 import bcrypt from 'bcryptjs';
 import User from "../models/userModel";
 import jwt from 'jsonwebtoken';
@@ -26,7 +27,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction): P
 
         await User.create({ name, email, password: hashedPassword, phoneNumber, gender })
 
-        res.status(200).send({ message: "Sign up is successfull.Please Sign in", Success: true })
+        res.status(200).send({ code: eResultCodes.R_SUCCESS, message: "Sign up is successfull.Please Sign in", Success: true })
 
     } catch (err) {
         console.error(err);
@@ -47,7 +48,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction): P
         const user = await User.findOne({ where: { email: email } });
 
         if (!user) {
-            res.status(404).send({ message: "User does not exist,Please sign up first" })
+            res.status(404).send({ code: eResultCodes.R_USER_NOT_FOUND, message: "User not found,Please sign up first" })
             return;
         }
 
@@ -55,9 +56,9 @@ export const signIn = async (req: Request, res: Response, next: NextFunction): P
 
         if (isPassword) {
             const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
-            res.status(200).send({ message: 'Sign in is success', token: token })
-        }else{
-            res.status(401).send({message:"Authentication Failed",error:"one or more field is incorrect"})
+            res.status(200).send({ code: eResultCodes.R_SUCCESS, message: 'Sign in is success', token: token })
+        } else {
+            res.status(401).send({ code: eResultCodes.R_AUTHENTICATION_FAILED, message: "Authentication Failed", error: "one or more field is incorrect" })
         }
     } catch (err) {
         console.error(err);
