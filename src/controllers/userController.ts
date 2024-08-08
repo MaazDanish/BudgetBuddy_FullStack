@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
 import User from "../models/userModel";
-import userValidationRules from "../validators/userValidation";
 
 export const signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
@@ -20,7 +19,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction): P
             res.status(401).send({ message: "User already exist,Sign in now" });
             return;
         }
-        const hashedPassword = bcrypt.hash(password, 10);
+        const hashedPassword =await bcrypt.hash(password, 10);
 
         await User.create({ name, email, password: hashedPassword, phoneNumber, gender })
 
