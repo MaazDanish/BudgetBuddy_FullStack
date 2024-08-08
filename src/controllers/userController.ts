@@ -81,7 +81,8 @@ export const updateUserInformation = async (req: customRequest, res: Response, n
     try {
         const user = req.currentUser as any;
         if (!user) {
-            res.status(401).send({ code: eResultCodes.R_UNAUTHORIZED ,msg:"authorization failed"})
+            res.status(401).send({ code: eResultCodes.R_UNAUTHORIZED, msg: "authorization failed" });
+            return;
         }
 
         const { name, phoneNumber, gender } = req.body;
@@ -96,8 +97,41 @@ export const updateUserInformation = async (req: customRequest, res: Response, n
         }
 
         await user.save();
-        
+
         res.status(200).send({ code: eResultCodes.R_SUCCESS })
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, message: "Internal Server Error" })
+    }
+}
+
+export const deleteUserAccount = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { password } = req.body;
+        const user = req.currentUser as any;
+
+        if (!user) {
+            res.status(401).send({ code: eResultCodes.R_UNAUTHORIZED, msg: "Invalid Token.Sign in again" })
+            return;
+        }
+
+        const isUser: any = await User.findByPk(user.id);
+
+        if (!isUser) {
+            res.status(401).send({ code: eResultCodes.R_USER_NOT_FOUND, msg: "User Not Found" })
+            return;
+        }
+
+        const isPassword = await bcrypt.compare(password, isUser.password);
+
+        if(isPassword){
+            await isUser.destroy();
+            res.status(200).send({message:"User deleted successfully"});
+            return;
+        }else{
+            res.status(401).send({code:eResultCodes.R_UNAUTHORIZED,msg:"You are not authorized for doing this action"})
+        }
+
     } catch (err) {
         console.error(err);
         res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, message: "Internal Server Error" })
