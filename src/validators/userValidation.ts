@@ -1,6 +1,6 @@
 const { body } = require('express-validator');
 
-const userValidationRules = [
+export const userValidationRules = [
     body('name').isString().withMessage('Name must be a string'),
     body('email').isEmail().withMessage('Enter a valid email address'),
     body('password')
@@ -12,4 +12,11 @@ const userValidationRules = [
     body('phoneNumber').isString().optional().withMessage('Phone number must be a string'),
     body('gender').isIn(['male', 'female']).optional().withMessage('Gender must be one of: male or female')
 ];
-export default userValidationRules;
+
+export const signInValidationRules = [
+    body('email').isEmail().withMessage('Enter a valid email'),
+    body('password')
+        .isLength({ min: 6 }).withMessage('Password must contain at least 6 characters')
+        .isString().withMessage('Password must be string not number')
+]
+// export default { userValidationRules, signInValidationRules };
