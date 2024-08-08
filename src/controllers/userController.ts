@@ -76,3 +76,30 @@ export const getUserInformation = async (req: customRequest, res: Response, next
         res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, message: "Internal Server Error" })
     }
 }
+
+export const updateUserInformation = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const user = req.currentUser as any;
+        if (!user) {
+            res.status(401).send({ code: eResultCodes.R_UNAUTHORIZED ,msg:"authorization failed"})
+        }
+
+        const { name, phoneNumber, gender } = req.body;
+        if (name) {
+            user.name = name;
+        }
+        if (phoneNumber) {
+            user.phoneNumber = phoneNumber;
+        }
+        if (gender) {
+            user.gender = gender;
+        }
+
+        await user.save();
+        
+        res.status(200).send({ code: eResultCodes.R_SUCCESS })
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, message: "Internal Server Error" })
+    }
+}
