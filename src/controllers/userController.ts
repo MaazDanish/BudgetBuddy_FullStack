@@ -80,10 +80,6 @@ export const getUserInformation = async (req: customRequest, res: Response, next
 export const updateUserInformation = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const user = req.currentUser as any;
-        if (!user) {
-            res.status(401).send({ code: eResultCodes.R_UNAUTHORIZED, msg: "authorization failed" });
-            return;
-        }
 
         const { name, phoneNumber, gender } = req.body;
         if (name) {
@@ -109,11 +105,6 @@ export const deleteUserAccount = async (req: customRequest, res: Response, next:
     try {
         const { password } = req.body;
         const user = req.currentUser as any;
-
-        if (!user) {
-            res.status(401).send({ code: eResultCodes.R_UNAUTHORIZED, msg: "Invalid Token.Sign in again" })
-            return;
-        }
 
         const isUser: any = await User.findByPk(user.id);
 
