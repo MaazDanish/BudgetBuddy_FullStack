@@ -108,11 +108,6 @@ export const deleteUserAccount = async (req: customRequest, res: Response, next:
 
         const isUser: any = await User.findByPk(user.id);
 
-        if (!isUser) {
-            res.status(401).send({ code: eResultCodes.R_USER_NOT_FOUND, msg: "User Not Found" })
-            return;
-        }
-
         const isPassword = await bcrypt.compare(password, isUser.password);
 
         if(isPassword){
@@ -120,7 +115,7 @@ export const deleteUserAccount = async (req: customRequest, res: Response, next:
             res.status(200).send({message:"User deleted successfully"});
             return;
         }else{
-            res.status(401).send({code:eResultCodes.R_UNAUTHORIZED,msg:"You are not authorized for doing this action"})
+            res.status(401).send({code:eResultCodes.R_UNAUTHORIZED,msg:"You can't perform this action"})
         }
 
     } catch (err) {
