@@ -6,12 +6,15 @@ dotenv.config()
 
 import sequelize from './utils/database';
 import userRoutes from './routes/userRoutes'
+import forgotPasswordRoutes from './routes/forgotPasswordRoutes'
+import setUpAssociations from './models/associations';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use('/bb/user', userRoutes);
+app.use('/bb/user/help', forgotPasswordRoutes);
 app.use('*', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         res.status(404).send({ msg: "Page Not Found", do: "Try with right path", success: false })
@@ -25,7 +28,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.status(500).send({ msg: 'Internal Server Error', success: false });
 });
 
-
+// Associations Calling
+setUpAssociations();
 
 sequelize.sync().then(() => {
     app.listen(process.env.SERVER_PORT, () => {
