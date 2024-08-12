@@ -25,4 +25,18 @@ const addExpense = async (req: customRequest, res: Response, next: NextFunction)
     }
 }
 
-export { addExpense };
+const getExpense = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const user = req.currentUser as User; // Cast currentUser to the User model type
+
+        const expense = await Expense.findAll({ where: { UserId: user.id } });
+
+        res.status(200).send({ code: eResultCodes.R_SUCCESS, message: "Fecthed Successfully", expense })
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, Message: "Internal server error" })
+    }
+}
+
+
+export { addExpense, getExpense };
