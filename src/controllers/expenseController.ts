@@ -38,5 +38,52 @@ const getExpense = async (req: customRequest, res: Response, next: NextFunction)
     }
 }
 
+const updateExpense = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
 
-export { addExpense, getExpense };
+        const id = req.params.id;
+        const { expenseName, expenseDescription, expenseAmount } = req.body;
+
+        const expense = await Expense.findOne({ where: { id: id } });
+
+        if (!expense) {
+            res.status(404).send({ code: eResultCodes.R_NOT_FOUND, message: "Expense Not Found" })
+            return;
+        }
+
+        expense.expenseName = expenseName;
+        expense.expenseDescription = expenseDescription;
+        expense.expenseAmount = expenseAmount;
+
+        await expense.save();
+
+        res.status(200).send({ code: eResultCodes.R_SUCCESS, message: "Expense Is Updated", expense })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, message: "Internal server error" })
+    }
+}
+
+const deleteExpense = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const id = req.params.id;
+
+        const expense = await Expense.findOne({ where: { id: id } });
+
+        if (!expense) {
+            res.status(404).send({ code: eResultCodes.R_NOT_FOUND, message: "Expense Not Found" })
+            return;
+        }
+
+        await expense.destroy();
+
+        res.status(200).send({ code: eResultCodes.R_SUCCESS, message: "Expense Is Deleted", expense })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ code: eResultCodes.R_INTERNAL_SERVER_ERROR, Message: "Internal server error" })
+    }
+}
+
+export { addExpense, getExpense, updateExpense, deleteExpense };
