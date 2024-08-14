@@ -2,12 +2,9 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/userModel";
 import bcrypt from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
 import nodemailer from 'nodemailer';
 import smtpTransport from "nodemailer-smtp-transport";
-import fs from 'fs'
 import sib from 'sib-api-v3-sdk';
-import path, { format } from 'path';
 import { eResultCodes } from "../enums/commonEnums";
 import ForgotPassword from "../models/forgotPasswordModel";
 

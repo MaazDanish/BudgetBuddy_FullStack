@@ -4,7 +4,6 @@ import User from "../models/userModel";
 import { eResultCodes } from "../enums/commonEnums";
 import { customRequest } from "../middlewares/customRequest";
 import { Op } from "sequelize";
-import { read } from "fs";
 
 const addExpense = async (req: customRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
